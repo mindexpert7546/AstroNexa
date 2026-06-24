@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AstroNexa – Expert Astrology Consultation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* =========================================================
+       VARIABLES & RESET
+    ========================================================= */
+    :root {
+      --gold:       #d4a843;
+      --gold-light: #f0c860;
+      --gold-dark:  #9a7828;
+      --dark:       #050512;
+      --dark-2:     #08081a;
+      --dark-3:     #0c0c22;
+      --dark-card:  #0f0f28;
+      --text:       #ffffff;
+      --text-muted: #9999bb;
+      --border:     rgba(212, 168, 67, 0.28);
+      --shadow:     0 0 30px rgba(212, 168, 67, 0.18);
+      --nav-h:      72px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    h1, h2, h3, h4, h5 { font-family: 'Cinzel', serif; line-height: 1.2; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+    input, select, textarea, button { font-family: inherit; }
+
+    /* =========================================================
+       TYPOGRAPHY HELPERS
+    ========================================================= */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(212, 168, 67, 0.12);
+      border: 1px solid var(--border);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-tag {
+      display: block;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: var(--gold-light);
+      text-align: center;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 580px;
+      margin: 0 auto 3rem;
+      font-size: 0.93rem;
+    }
+
+    .divider {
+      width: 55px;
+      height: 3px;
+      background: linear-gradient(to right, var(--gold-dark), var(--gold-light));
+      border-radius: 2px;
+      margin: 12px auto 18px;
+    }
+
+    /* =========================================================
+       LAYOUT
+    ========================================================= */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 84px 0; }
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.28s ease;
+    }
+
+    .btn-gold   { background: var(--gold); color: #000; }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(212,168,67,0.45); }
+
+    .btn-outline { background: transparent; border: 2px solid var(--gold); color: var(--gold); }
+    .btn-outline:hover { background: var(--gold); color: #000; transform: translateY(-2px); }
+
+    .btn-green  { background: #25d366; color: #fff; }
+    .btn-green:hover { background: #1fc25c; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(37,211,102,0.4); }
+
+    /* =========================================================
+       NAVBAR
+    ========================================================= */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 1000;
+      background: rgba(5,5,18,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    .navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.6); }
+
+    .nav-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      gap: 20px;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .logo-gem {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #000;
+    }
+    .logo-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .logo-sub {
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* Nav links */
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      transition: color 0.25s;
+      position: relative;
+      padding-bottom: 4px;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.25s;
+      border-radius: 1px;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* Nav right */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+    .nav-phone {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+    }
+    .hamburger span {
+      display: block;
+      width: 23px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 1px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-8px); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--dark-2);
+      border-top: 1px solid var(--border);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 14px 26px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      transition: all 0.25s;
+    }
+    .mobile-menu a:hover { color: var(--gold); padding-left: 34px; }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+    .hero {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 30% 40%, #1e0a35 0%, #0d0420 45%, #050512 100%);
+    }
+
+    /* Star canvas */
+    #stars { position: absolute; inset: 0; pointer-events: none; }
+
+    /* Glow orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    .orb-purple { width: 340px; height: 340px; background: #6b2fa0; top: -60px; right: 10%; }
+    .orb-gold   { width: 200px; height: 200px; background: var(--gold-dark); bottom: 5%; left: 5%; }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      margin-bottom: 18px;
+      color: #fff;
+    }
+    .hero-title span { color: var(--gold-light); }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 0.97rem;
+      margin-bottom: 32px;
+      max-width: 470px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .hero-trust {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .trust-item i { color: var(--gold); }
+
+    /* Hero Visual */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .zodiac-wheel {
+      width: 370px;
+      height: 370px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(212,168,67,0.35);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: spinSlow 30s linear infinite;
+    }
+    .zodiac-wheel::before {
+      content: '';
+      position: absolute;
+      inset: 22px;
+      border-radius: 50%;
+      border: 1px dashed rgba(212,168,67,0.2);
+    }
+    .zodiac-wheel::after {
+      content: '';
+      position: absolute;
+      inset: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(212,168,67,0.12);
+    }
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .wheel-center {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: spinSlow 30s linear infinite reverse;
+      gap: 4px;
+    }
+
+    .center-icon {
+      font-size: 5.5rem;
+      color: var(--gold);
+      opacity: 0.85;
+      filter: drop-shadow(0 0 28px rgba(212,168,67,0.6));
+      animation: floatY 4s ease-in-out infinite;
+    }
+    @keyframes floatY { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+
+    .orbit-dot {
+      position: absolute;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--gold);
+    }
+
+    .zodiac-signs {
+      position: absolute;
+      inset: -10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sign-mark {
+      position: absolute;
+      font-size: 1.1rem;
+      color: rgba(212,168,67,0.6);
+      width: 24px;
+      text-align: center;
+    }
+
+    /* =========================================================
+       SECTION: PROBLEMS WE HELP WITH
+    ========================================================= */
+    .problems { background: var(--dark-2); }
+
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .prob-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .prob-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--gold-dark), var(--gold-light));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .prob-card:hover { transform: translateY(-6px); border-color: var(--gold); box-shadow: var(--shadow); }
+    .prob-card:hover::after { transform: scaleX(1); }
+
+    .prob-icon {
+      width: 54px; height: 54px;
+      background: rgba(212,168,67,0.12);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+      transition: all 0.3s;
+    }
+    .prob-card:hover .prob-icon { background: var(--gold); color: #000; border-color: var(--gold); }
+
+    .prob-card h3 {
+      font-size: 1rem;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+
+    .prob-card ul li {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .prob-card ul li::before {
+      content: '▸';
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    /* =========================================================
+       SECTION: ABOUT / STATS
+    ========================================================= */
+    .about { background: var(--dark-3); }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      color: var(--gold-light);
+      margin-bottom: 18px;
+    }
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      margin-bottom: 14px;
+    }
+    .about-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .stat-card:hover { border-color: var(--gold); box-shadow: var(--shadow); transform: translateY(-3px); }
+
+    .stat-val {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .stat-suffix {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .stat-label { color: var(--text-muted); font-size: 0.83rem; margin-top: 8px; }
+
+    /* =========================================================
+       SECTION: PROCESS
+    ========================================================= */
+    .process { background: var(--dark-2); }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 38px;
+      left: calc(12.5% + 16px);
+      right: calc(12.5% + 16px);
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.35;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 28px 16px;
+    }
+
+    .step-num {
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: var(--dark-card);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s;
+    }
+    .step-card:hover .step-num {
+      background: var(--gold);
+      color: #000;
+      box-shadow: 0 0 22px rgba(212,168,67,0.55);
+    }
+
+    .step-label {
+      font-size: 0.72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .step-card h3 { font-size: 0.97rem; color: var(--text); margin-bottom: 8px; }
+    .step-card p  { font-size: 0.83rem; color: var(--text-muted); }
+
+    /* =========================================================
+       SECTION: WHY CHOOSE + TESTIMONIALS
+    ========================================================= */
+    .social-proof { background: var(--dark-3); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+
+    .col-header { margin-bottom: 28px; }
+    .col-header h2 {
+      font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+      color: var(--gold-light);
+    }
+
+    /* Features */
+    .features { display: flex; flex-direction: column; gap: 14px; }
+
+    .feat-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 15px 18px;
+      background: var(--dark-card);
+      border: 1px solid rgba(212,168,67,0.1);
+      border-radius: 9px;
+      transition: all 0.3s;
+    }
+    .feat-item:hover { border-color: var(--gold); transform: translateX(5px); }
+
+    .feat-ico {
+      width: 38px; height: 38px;
+      background: rgba(212,168,67,0.12);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+      font-size: 0.95rem;
+    }
+
+    .feat-txt strong { display: block; font-size: 0.88rem; color: var(--text); margin-bottom: 2px; }
+    .feat-txt span   { font-size: 0.79rem; color: var(--text-muted); }
+
+    /* Testimonials */
+    .testi-cards { display: flex; flex-direction: column; gap: 16px; }
+
+    .testi-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      transition: all 0.3s;
+    }
+    .testi-card:hover { border-color: var(--gold); box-shadow: var(--shadow); }
+
+    .stars { color: var(--gold); font-size: 0.88rem; margin-bottom: 10px; }
+    .quote { color: var(--text-muted); font-size: 0.85rem; font-style: italic; line-height: 1.7; margin-bottom: 14px; }
+
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      color: #000;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+    .author-name { font-weight: 600; font-size: 0.88rem; color: var(--text); }
+    .author-city { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* =========================================================
+       SECTION: FAQ
+    ========================================================= */
+    .faq { background: var(--dark-2); }
+
+    .faq-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .faq-item.open { border-color: var(--gold); }
+
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 24px;
+      cursor: pointer;
+      background: var(--dark-card);
+      user-select: none;
+      transition: background 0.25s;
+    }
+    .faq-q:hover { background: rgba(212,168,67,0.04); }
+    .faq-q h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.93rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .faq-ic {
+      width: 28px; height: 28px;
+      background: rgba(212,168,67,0.14);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+      transition: transform 0.35s, background 0.25s;
+    }
+    .faq-item.open .faq-ic { transform: rotate(45deg); background: var(--gold); color: #000; }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      background: var(--dark-card);
+      transition: max-height 0.42s ease;
+    }
+    .faq-a p {
+      padding: 2px 24px 18px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.75;
+    }
+    .faq-item.open .faq-a { max-height: 220px; }
+
+    /* =========================================================
+       SECTION: CONTACT
+    ========================================================= */
+    .contact { background: var(--dark-3); }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+    .contact-info > p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+    .ci-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .ci-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .ci-row i { color: var(--gold); font-size: 1rem; width: 18px; text-align: center; }
+    .ci-row span { color: var(--text-muted); font-size: 0.88rem; }
+    .ci-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* Form */
+    .form-box {
+      background: var(--dark-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 32px;
+    }
+    .form-box h3 {
+      font-size: 1.15rem;
+      color: var(--gold-light);
+      margin-bottom: 24px;
+    }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 7px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--gold); }
+
+    .form-group select { appearance: none; cursor: pointer; }
+    .form-group select option { background: var(--dark-2); }
+    .form-group textarea { height: 110px; resize: vertical; }
+
+    input::placeholder, textarea::placeholder { color: rgba(153,153,187,0.55); }
+
+    .btn-submit {
+      width: 100%;
+      justify-content: center;
+      padding: 14px;
+      font-size: 0.93rem;
+      letter-spacing: 0.3px;
+    }
+
+    .form-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(37,211,102,0.1);
+      border: 1px solid rgba(37,211,102,0.3);
+      border-radius: 6px;
+      color: #25d366;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    /* =========================================================
+       SECTION: CTA BANNER
+    ========================================================= */
+    .cta-banner {
+      padding: 64px 0;
+      background: linear-gradient(135deg, #1c0e35 0%, #0d0522 50%, #1c0e35 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .cta-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .cta-text h2 { font-size: clamp(1.25rem, 2.5vw, 1.9rem); color: var(--gold-light); margin-bottom: 8px; }
+    .cta-text p  { color: var(--text-muted); font-size: 0.9rem; }
+    .cta-btns    { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+    footer {
+      background: var(--dark-2);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.6fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      margin: 14px 0 20px;
+      line-height: 1.75;
+    }
+
+    .social-row { display: flex; gap: 10px; }
+    .soc-link {
+      width: 36px; height: 36px;
+      background: rgba(212,168,67,0.12);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 0.88rem;
+      transition: all 0.25s;
+    }
+    .soc-link:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+
+    .footer-col h4 {
+      font-size: 0.93rem;
+      color: var(--gold-light);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .footer-col ul li a::before { content: '›'; color: var(--gold); }
+    .footer-col ul li a:hover  { color: var(--gold); padding-left: 4px; }
+
+    .fc-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+    .fc-row i { color: var(--gold); font-size: 0.88rem; margin-top: 2px; width: 16px; }
+    .fc-row span { color: var(--text-muted); font-size: 0.84rem; line-height: 1.55; }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .footer-bottom p { color: var(--text-muted); font-size: 0.8rem; }
+    .footer-bottom span { color: var(--gold); }
+
+    /* =========================================================
+       FLOATING BUTTONS
+    ========================================================= */
+    .wa-float {
+      position: fixed;
+      bottom: 78px;
+      right: 22px;
+      z-index: 900;
+    }
+    .wa-float a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #25d366;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: all 0.3s;
+    }
+    .wa-float a:hover { transform: scale(1.06); box-shadow: 0 6px 26px rgba(37,211,102,0.6); }
+
+    .back-top {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      width: 44px;
+      height: 44px;
+      background: var(--gold);
+      color: #000;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: all 0.3s;
+      z-index: 900;
+    }
+    .back-top.show { opacity: 1; transform: translateY(0); }
+    .back-top:hover { background: var(--gold-light); }
+
+    /* =========================================================
+       SCROLL ANIMATIONS
+    ========================================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+    @media (max-width: 1024px) {
+      .problems-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      :root { --nav-h: 64px; }
+      section { padding: 60px 0; }
+
+      /* Navbar */
+      .nav-links, .nav-right { display: none; }
+      .hamburger { display: flex; }
+
+      /* Hero */
+      .hero-inner { grid-template-columns: 1fr; text-align: center; padding: 44px 20px; }
+      .hero-visual { display: none; }
+      .hero-btns   { justify-content: center; }
+      .hero-trust  { justify-content: center; }
+      .hero-desc   { margin-left: auto; margin-right: auto; }
+
+      /* About */
+      .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .about-btns  { justify-content: center; }
+
+      /* Two col */
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+
+      /* Contact */
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .form-row-2    { grid-template-columns: 1fr; }
+      .form-box      { padding: 26px 22px; }
+      .ci-btns       { justify-content: flex-start; }
+
+      /* Problems */
+      .problems-grid { grid-template-columns: 1fr; }
+
+      /* Process */
+      .process-steps { grid-template-columns: 1fr 1fr; }
+
+      /* CTA */
+      .cta-inner { flex-direction: column; text-align: center; }
+      .cta-btns  { justify-content: center; }
+
+      /* Footer */
+      .footer-grid   { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+
+      /* Stats */
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 290px; justify-content: center; }
+      .process-steps { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-wrap">
+      <a href="#home" class="logo" aria-label="AstroNexa Home">
+        <div class="logo-gem"><i class="fas fa-star"></i></div>
+        <div>
+          <span class="logo-name">AstroNexa</span>
+          <span class="logo-sub">Guiding Your Destiny</span>
+        </div>
+      </a>
+
+      <ul class="nav-links" role="navigation" aria-label="Main navigation">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <a href="tel:+919876543210" class="nav-phone" aria-label="Call us">
+          <i class="fas fa-phone"></i>
+          <span>+91 98765 43210</span>
+        </a>
+        <a href="https://wa.me/919876543210" class="btn btn-green" style="padding:8px 16px;font-size:.82rem;" rel="noopener noreferrer" aria-label="WhatsApp">
+          <i class="fab fa-whatsapp"></i> WhatsApp Now
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About Us</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+      <a href="tel:+919876543210" style="color:var(--gold);"><i class="fas fa-phone"></i>&nbsp; +91 98765 43210</a>
+    </nav>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="home" aria-label="Hero section">
+    <canvas id="stars" aria-hidden="true"></canvas>
+    <div class="orb orb-purple" aria-hidden="true"></div>
+    <div class="orb orb-gold"   aria-hidden="true"></div>
+
+    <div class="hero-inner container">
+      <!-- Left content -->
+      <div class="reveal">
+        <div class="tag"><i class="fas fa-star"></i> Trusted Astrology Consultation</div>
+        <h1 class="hero-title">
+          Expert Astrology Consultation for
+          <span>Love, Career, Family</span>
+          &amp; Life Guidance
+        </h1>
+        <p class="hero-desc">
+          Get accurate predictions and powerful solutions to overcome your problems
+          and bring happiness, peace and prosperity in your life.
+        </p>
+        <div class="hero-btns">
+          <a href="tel:+919876543210" class="btn btn-gold" aria-label="Call Now">
+            <i class="fas fa-phone"></i> Call Now
+          </a>
+          <a href="https://wa.me/919876543210" class="btn btn-green" rel="noopener noreferrer" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i> WhatsApp Now
+          </a>
+          <a href="#contact" class="btn btn-outline" aria-label="Book Consultation">
+            <i class="fas fa-calendar-check"></i> Book Consultation
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item"><i class="fas fa-shield-alt"></i> 100% Confidential</div>
+          <div class="trust-item"><i class="fas fa-users"></i> Trusted by Thousands</div>
+          <div class="trust-item"><i class="fas fa-award"></i> Satisfaction Guaranteed</div>
+        </div>
+      </div>
+
+      <!-- Right visual -->
+      <div class="hero-visual reveal" aria-hidden="true">
+        <div class="zodiac-wheel">
+          <!-- Zodiac sign markers -->
+          <div class="zodiac-signs">
+            <span class="sign-mark" style="top:4%;left:50%;transform:translateX(-50%)">♈</span>
+            <span class="sign-mark" style="top:12%;right:14%">♉</span>
+            <span class="sign-mark" style="top:33%;right:4%">♊</span>
+            <span class="sign-mark" style="top:50%;right:0%;transform:translateY(-50%)">♋</span>
+            <span class="sign-mark" style="bottom:33%;right:4%">♌</span>
+            <span class="sign-mark" style="bottom:12%;right:14%">♍</span>
+            <span class="sign-mark" style="bottom:4%;left:50%;transform:translateX(-50%)">♎</span>
+            <span class="sign-mark" style="bottom:12%;left:14%">♏</span>
+            <span class="sign-mark" style="bottom:33%;left:4%">♐</span>
+            <span class="sign-mark" style="top:50%;left:0;transform:translateY(-50%)">♑</span>
+            <span class="sign-mark" style="top:33%;left:4%">♒</span>
+            <span class="sign-mark" style="top:12%;left:14%">♓</span>
+          </div>
+          <!-- Orbit dots -->
+          <span class="orbit-dot" style="top:5%;left:50%;transform:translateX(-50%)"></span>
+          <span class="orbit-dot" style="top:50%;right:3%;transform:translateY(-50%)"></span>
+          <span class="orbit-dot" style="bottom:5%;left:50%;transform:translateX(-50%)"></span>
+          <span class="orbit-dot" style="top:50%;left:3%;transform:translateY(-50%)"></span>
+          <!-- Center -->
+          <div class="wheel-center">
+            <i class="fas fa-moon center-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROBLEMS / SERVICES ===================== -->
+  <section class="problems" id="services" aria-labelledby="prob-heading">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-tag" style="text-align:center;display:block;">What We Offer</span>
+        <h2 class="section-title" id="prob-heading">Problems We Help With</h2>
+        <div class="divider"></div>
+        <p class="section-desc">We provide accurate guidance and effective solutions for all major life challenges through the power of Vedic astrology.</p>
+      </div>
+
+      <div class="problems-grid">
+        <div class="prob-card reveal">
+          <div class="prob-icon"><i class="fas fa-heart"></i></div>
+          <h3>Love &amp; Relationship</h3>
+          <ul>
+            <li>Love Marriage</li>
+            <li>Relationship Issues</li>
+            <li>Marriage Compatibility</li>
+            <li>Breakup Problems</li>
+          </ul>
+        </div>
+        <div class="prob-card reveal">
+          <div class="prob-icon"><i class="fas fa-home"></i></div>
+          <h3>Family Issues</h3>
+          <ul>
+            <li>Family Disputes</li>
+            <li>Domestic Problems</li>
+            <li>Relationship Healing</li>
+            <li>In-Law Conflicts</li>
+          </ul>
+        </div>
+        <div class="prob-card reveal">
+          <div class="prob-icon"><i class="fas fa-briefcase"></i></div>
+          <h3>Career &amp; Business</h3>
+          <ul>
+            <li>Job Problems</li>
+            <li>Business Consultation</li>
+            <li>Career Planning</li>
+            <li>Professional Growth</li>
+          </ul>
+        </div>
+        <div class="prob-card reveal">
+          <div class="prob-icon"><i class="fas fa-coins"></i></div>
+          <h3>Finance Guidance</h3>
+          <ul>
+            <li>Financial Problems</li>
+            <li>Money Problems</li>
+            <li>Investment Advice</li>
+            <li>Wealth Growth</li>
+          </ul>
+        </div>
+        <div class="prob-card reveal">
+          <div class="prob-icon"><i class="fas fa-building"></i></div>
+          <h3>Vastu Consultation</h3>
+          <ul>
+            <li>Home Vastu</li>
+            <li>Office Vastu</li>
+            <li>Factory Vastu</li>
+            <li>Vastu Remedies</li>
+          </ul>
+        </div>
+        <div class="prob-card reveal">
+          <div class="prob-icon"><i class="fas fa-star"></i></div>
+          <h3>Horoscope Analysis</h3>
+          <ul>
+            <li>Birth Chart Reading</li>
+            <li>Kundli Analysis</li>
+            <li>Future Predictions</li>
+            <li>Life Guidance</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT / STATS ===================== -->
+  <section class="about" id="about" aria-labelledby="about-heading">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-text reveal">
+          <span class="section-tag">About AstroNexa</span>
+          <h2 id="about-heading">Why Thousands Trust AstroNexa</h2>
+          <div class="divider" style="margin:16px 0;"></div>
+          <p>At AstroNexa, we combine ancient Vedic wisdom with deep astrological knowledge to provide accurate predictions and effective remedies.</p>
+          <p>Our goal is to guide you towards a better tomorrow with clarity, confidence and positivity. Every person's journey is unique and our expert astrologers provide personalized solutions tailored to your specific situation.</p>
+          <p>With over a decade of experience and thousands of satisfied clients, we have built a reputation for accuracy, confidentiality and genuine care for our clients.</p>
+          <div class="about-btns">
+            <a href="#contact" class="btn btn-gold"><i class="fas fa-calendar-alt"></i> Book Consultation</a>
+            <a href="tel:+919876543210" class="btn btn-outline"><i class="fas fa-phone"></i> Call Now</a>
+          </div>
+        </div>
+
+        <div class="stats-grid reveal">
+          <div class="stat-card">
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:2px;">
+              <span class="stat-val" data-target="10" data-suffix="+">0</span>
+            </div>
+            <div class="stat-label">Years of Experience</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:2px;">
+              <span class="stat-val" data-target="5000" data-suffix="+">0</span>
+            </div>
+            <div class="stat-label">Consultations Done</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:2px;">
+              <span class="stat-val" data-target="95" data-suffix="%">0</span>
+            </div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:2px;">
+              <span class="stat-val">24/7</span>
+            </div>
+            <div class="stat-label">Support Available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESS ===================== -->
+  <section class="process" aria-labelledby="process-heading">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-tag" style="text-align:center;display:block;">How It Works</span>
+        <h2 class="section-title" id="process-heading">Our Consultation Process</h2>
+        <div class="divider"></div>
+        <p class="section-desc">Simple steps to get your personalized astrology consultation and life guidance.</p>
+      </div>
+
+      <div class="process-steps">
+        <div class="step-card reveal">
+          <div class="step-num">1</div>
+          <div class="step-label">Step 1</div>
+          <h3>Contact Us</h3>
+          <p>Reach out to us via call, WhatsApp or the contact form below.</p>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-num">2</div>
+          <div class="step-label">Step 2</div>
+          <h3>Share Details</h3>
+          <p>Share your birth details and problem with us for analysis.</p>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-num">3</div>
+          <div class="step-label">Step 3</div>
+          <h3>Personal Consultation</h3>
+          <p>Get one-on-one consultation with our expert astrologers.</p>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-num">4</div>
+          <div class="step-label">Step 4</div>
+          <h3>Receive Guidance</h3>
+          <p>Receive accurate predictions, solutions and life guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHY CHOOSE + TESTIMONIALS ===================== -->
+  <section class="social-proof" id="testimonials" aria-labelledby="sp-heading">
+    <div class="container">
+      <div class="two-col">
+        <!-- Why Choose Us -->
+        <div>
+          <div class="col-header reveal">
+            <span class="section-tag">Why Choose Us</span>
+            <h2 id="sp-heading">What Makes Us Different</h2>
+            <div class="divider" style="margin:14px 0;"></div>
+          </div>
+          <div class="features">
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-bullseye"></i></div>
+              <div class="feat-txt">
+                <strong>Accurate &amp; Personalized Predictions</strong>
+                <span>Tailored guidance based on your unique birth chart</span>
+              </div>
+            </div>
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-lock"></i></div>
+              <div class="feat-txt">
+                <strong>Confidential &amp; Secure Consultation</strong>
+                <span>Your privacy is our top priority at all times</span>
+              </div>
+            </div>
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-user-graduate"></i></div>
+              <div class="feat-txt">
+                <strong>Experienced &amp; Expert Astrologers</strong>
+                <span>10+ years of expertise in Vedic astrology</span>
+              </div>
+            </div>
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-globe"></i></div>
+              <div class="feat-txt">
+                <strong>Online &amp; Offline Consultation Available</strong>
+                <span>Consult from anywhere, at your convenience</span>
+              </div>
+            </div>
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-magic"></i></div>
+              <div class="feat-txt">
+                <strong>Effective Remedies &amp; Solutions</strong>
+                <span>Practical and proven remedies that truly work</span>
+              </div>
+            </div>
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-calendar-check"></i></div>
+              <div class="feat-txt">
+                <strong>Quick Appointment &amp; Easy Booking</strong>
+                <span>Book your session in minutes via call or form</span>
+              </div>
+            </div>
+            <div class="feat-item reveal">
+              <div class="feat-ico"><i class="fas fa-headset"></i></div>
+              <div class="feat-txt">
+                <strong>Dedicated Customer Support</strong>
+                <span>We are here for you 24/7 whenever you need us</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div>
+          <div class="col-header reveal">
+            <span class="section-tag">Client Reviews</span>
+            <h2>What Our Clients Say</h2>
+            <div class="divider" style="margin:14px 0;"></div>
+          </div>
+          <div class="testi-cards">
+            <div class="testi-card reveal">
+              <div class="stars">★★★★★</div>
+              <p class="quote">"Very professional and accurate consultations. My problems were understood quickly and solutions really worked!"</p>
+              <div class="author">
+                <div class="avatar">B</div>
+                <div>
+                  <div class="author-name">Brija Sharma</div>
+                  <div class="author-city">Delhi</div>
+                </div>
+              </div>
+            </div>
+            <div class="testi-card reveal">
+              <div class="stars">★★★★★</div>
+              <p class="quote">"AstroNexa changed my life for the better. Highly recommended for those seeking insight on Love or Career."</p>
+              <div class="author">
+                <div class="avatar">A</div>
+                <div>
+                  <div class="author-name">Amit Verma</div>
+                  <div class="author-city">Mumbai</div>
+                </div>
+              </div>
+            </div>
+            <div class="testi-card reveal">
+              <div class="stars">★★★★★</div>
+              <p class="quote">"The guidance was very clear and easy to follow. Thank you AstroNexa for the wonderful support."</p>
+              <div class="author">
+                <div class="avatar">N</div>
+                <div>
+                  <div class="author-name">Neha Kapoor</div>
+                  <div class="author-city">Bangalore</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="faq" id="faq" aria-labelledby="faq-heading">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-tag" style="text-align:center;display:block;">Got Questions?</span>
+        <h2 class="section-title" id="faq-heading">Frequently Asked Questions</h2>
+        <div class="divider"></div>
+        <p class="section-desc">Answers to the most common questions about our astrology consultation services.</p>
+      </div>
+
+      <div class="faq-wrap">
+        <div class="faq-item reveal">
+          <div class="faq-q" role="button" tabindex="0" aria-expanded="false">
+            <h4>Is online consultation available?</h4>
+            <div class="faq-ic" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-a">
+            <p>Yes, we offer both online and offline consultations. You can connect with our expert astrologers via phone call, WhatsApp video call, or visit us in person. Online consultations are just as detailed and effective as in-person sessions.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-q" role="button" tabindex="0" aria-expanded="false">
+            <h4>How can I book an appointment?</h4>
+            <div class="faq-ic" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-a">
+            <p>You can book an appointment by calling +91 98765 43210, sending a WhatsApp message, or filling out the contact form on this page. We confirm your appointment within a few hours and schedule you at the earliest available slot.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-q" role="button" tabindex="0" aria-expanded="false">
+            <h4>What details are required for consultation?</h4>
+            <div class="faq-ic" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-a">
+            <p>For a detailed consultation we need your full name, date of birth, exact time of birth, and place of birth. This helps us create an accurate Kundli (birth chart) to provide personalized guidance and predictions.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-q" role="button" tabindex="0" aria-expanded="false">
+            <h4>How long does a consultation take?</h4>
+            <div class="faq-ic" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-a">
+            <p>A standard consultation typically lasts 30–60 minutes depending on the complexity of your situation. We ensure every client receives sufficient time to discuss their problems and receive thorough, actionable guidance.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-q" role="button" tabindex="0" aria-expanded="false">
+            <h4>Is my information kept confidential?</h4>
+            <div class="faq-ic" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-a">
+            <p>Absolutely. We treat all client information with utmost confidentiality. Your personal details, birth information, and consultation discussions are never shared with any third party. Your privacy is our commitment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section class="contact" id="contact" aria-labelledby="contact-heading">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-tag" style="text-align:center;display:block;">Reach Out</span>
+        <h2 class="section-title" id="contact-heading">Get In Touch</h2>
+        <div class="divider"></div>
+        <p class="section-desc">Connect with our expert astrologers for personalized guidance and solutions.</p>
+      </div>
+
+      <div class="contact-inner">
+        <!-- Info -->
+        <div class="contact-info reveal">
+          <h2>We're Here to Help</h2>
+          <p>Connect with our expert astrologers for accurate predictions and powerful solutions to your life challenges.</p>
+          <div class="ci-list">
+            <div class="ci-row">
+              <i class="fas fa-phone"></i>
+              <span>+91 98765 43210</span>
+            </div>
+            <div class="ci-row">
+              <i class="fab fa-whatsapp"></i>
+              <span>+91 98765 43210</span>
+            </div>
+            <div class="ci-row">
+              <i class="fas fa-envelope"></i>
+              <span>contact@astronexa.in</span>
+            </div>
+            <div class="ci-row">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>New Delhi, India</span>
+            </div>
+            <div class="ci-row">
+              <i class="fas fa-clock"></i>
+              <span>Available 24/7 for consultations</span>
+            </div>
+          </div>
+          <div class="ci-btns">
+            <a href="tel:+919876543210" class="btn btn-gold"><i class="fas fa-phone"></i> Call Now</a>
+            <a href="https://wa.me/919876543210" class="btn btn-green" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-box reveal">
+          <h3>Send Us a Message</h3>
+          <form id="contactForm" novalidate>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required minlength="2" maxlength="80" autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="phone">Your Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter phone number" required pattern="[0-9+\-\s]{7,15}" maxlength="15" autocomplete="tel" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="type">Select Consultation Type</label>
+              <select id="type" required>
+                <option value="">Select consultation type…</option>
+                <option>Love &amp; Relationship</option>
+                <option>Family Issues</option>
+                <option>Career &amp; Business</option>
+                <option>Finance Guidance</option>
+                <option>Vastu Consultation</option>
+                <option>Horoscope Analysis</option>
+                <option>General Consultation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="msg">Your Message</label>
+              <textarea id="msg" placeholder="Describe your problem or query…" maxlength="1000"></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold btn-submit">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <div class="form-msg" id="formMsg" role="alert">
+              <i class="fas fa-check-circle"></i> Your message has been sent! We'll get back to you shortly.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BANNER ===================== -->
+  <section class="cta-banner" aria-label="Call to action">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-text reveal">
+          <h2>Need Astrology Guidance?</h2>
+          <p>Connect with our experts on WhatsApp and get solutions to your problems instantly.</p>
+        </div>
+        <div class="cta-btns reveal">
+          <a href="https://wa.me/919876543210" class="btn btn-green" style="font-size:.95rem;padding:14px 28px;" rel="noopener noreferrer">
+            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+          </a>
+          <a href="tel:+919876543210" class="btn btn-gold" style="font-size:.95rem;padding:14px 28px;">
+            <i class="fas fa-phone"></i> Call Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer aria-label="Footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand -->
+        <div class="footer-brand">
+          <div class="logo" style="margin-bottom:0">
+            <div class="logo-gem"><i class="fas fa-star"></i></div>
+            <div>
+              <span class="logo-name">AstroNexa</span>
+              <span class="logo-sub">Guiding Your Destiny</span>
+            </div>
+          </div>
+          <p>AstroNexa is a trusted astrology consultation platform. We help you find clarity, happiness and direction through the ancient wisdom of Vedic astrology.</p>
+          <div class="social-row">
+            <a href="#" class="soc-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="soc-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="soc-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="soc-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Useful Links -->
+        <div class="footer-col">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Disclaimer</a></li>
+            <li><a href="#">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="footer-col">
+          <h4>Contact Info</h4>
+          <div class="fc-row"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+          <div class="fc-row"><i class="fas fa-envelope"></i><span>contact@astronexa.in</span></div>
+          <div class="fc-row"><i class="fas fa-map-marker-alt"></i><span>New Delhi, India</span></div>
+          <div class="fc-row"><i class="fas fa-clock"></i><span>Available 24/7 for consultations</span></div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2024 AstroNexa. All Rights Reserved.</p>
+        <p>Made with <span>♥</span> for better guidance</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp float -->
+  <div class="wa-float" aria-label="WhatsApp chat">
+    <a href="https://wa.me/919876543210" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp" style="font-size:1.1rem;"></i> Chat on WhatsApp
+    </a>
+  </div>
+
+  <!-- Back to top -->
+  <button class="back-top" id="backTop" aria-label="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
+    /* ---- Star canvas ---- */
+    (function () {
+      const canvas = document.getElementById('stars');
+      const ctx    = canvas.getContext('2d');
+      let   stars  = [];
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+      }
+
+      function init() {
+        stars = [];
+        const count = Math.floor((canvas.width * canvas.height) / 7000);
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x:    Math.random() * canvas.width,
+            y:    Math.random() * canvas.height,
+            r:    Math.random() * 1.5 + 0.3,
+            a:    Math.random(),
+            da:   (Math.random() * 0.004 + 0.001) * (Math.random() > 0.5 ? 1 : -1)
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+          s.a += s.da;
+          if (s.a <= 0 || s.a >= 1) s.da *= -1;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+
+    /* ---- Hamburger ---- */
+    const ham    = document.getElementById('hamburger');
+    const mob    = document.getElementById('mobileMenu');
+    ham.addEventListener('click', () => {
+      const open = ham.classList.toggle('open');
+      mob.classList.toggle('open');
+      ham.setAttribute('aria-expanded', open);
+    });
+    mob.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      ham.classList.remove('open');
+      mob.classList.remove('open');
+      ham.setAttribute('aria-expanded', 'false');
+    }));
+
+    /* ---- Sticky nav shadow ---- */
+    const navbar = document.getElementById('navbar');
+    const onScroll = () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+      document.getElementById('backTop').classList.toggle('show', window.scrollY > 400);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ---- Back to top ---- */
+    document.getElementById('backTop').addEventListener('click', () =>
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    );
+
+    /* ---- FAQ accordion ---- */
+    document.querySelectorAll('.faq-q').forEach(q => {
+      const toggle = () => {
+        const item   = q.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          q.setAttribute('aria-expanded', 'true');
+        }
+      };
+      q.addEventListener('click', toggle);
+      q.addEventListener('keydown', e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), toggle()));
+    });
+
+    /* ---- Scroll reveal ---- */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ---- Counter animation ---- */
+    const cio = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el     = e.target;
+        const target = parseInt(el.dataset.target, 10);
+        const suffix = el.dataset.suffix || '';
+        const dur    = 1800;
+        const start  = performance.now();
+        const tick   = now => {
+          const t   = Math.min((now - start) / dur, 1);
+          const val = Math.floor(t * t * (3 - 2 * t) * target); // smooth step
+          el.textContent = (target >= 1000 ? val.toLocaleString() : val) + suffix;
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        cio.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.stat-val[data-target]').forEach(el => cio.observe(el));
+
+    /* ---- Contact form ---- */
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name  = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const type  = document.getElementById('type').value;
+
+      if (!name || !phone || !type) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const btn = this.querySelector('.btn-submit');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+      // Simulate network delay
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+        btn.style.background = '#25d366';
+        const msg = document.getElementById('formMsg');
+        msg.style.display = 'block';
+        this.reset();
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+          btn.style.background = '';
+          msg.style.display = 'none';
+        }, 4000);
+      }, 1200);
+    });
+
+    /* ---- Active nav link on scroll ---- */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY + 90;
+      sections.forEach(sec => {
+        if (scrollY >= sec.offsetTop && scrollY < sec.offsetTop + sec.offsetHeight) {
+          navLinks.forEach(a => a.style.color = '');
+          const active = document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+          if (active) active.style.color = 'var(--gold)';
+        }
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>
